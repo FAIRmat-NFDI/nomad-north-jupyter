@@ -1,9 +1,9 @@
 site_name: nomad-north-jupyter
 site_description: An example for Jupyter NORTH tool (Jupyter docker image).
-site_author: John Doe
+site_author: NOMAD Authors
 
 repo_url: https://github.com/fairmat-nfdi/nomad-north-jupyter
-edit_uri: ""
+edit_uri: ''
 
 nav:
   - Home: index.md
@@ -20,10 +20,10 @@ plugins:
 theme:
   name: material
   palette:
-    primary: "#2A4CDF"
-    accent: "#008A67"
+    primary: '#2A4CDF'
+    accent: '#008A67'
   font:
-    text: "Titillium Web"
+    text: 'Titillium Web'
   logo: assets/nomad-plugin-logo.png
   favicon: assets/favicon.png
   features:

@@ -121,6 +121,6 @@ We use [`cruft`](https://github.com/cruft/cruft) to update the project based on 
 
 ## Main contributors
 
-| Name     | E-mail                                                              |
-| -------- | ------------------------------------------------------------------- |
-| John Doe | [john.doe@physik.hu-berlin.de](mailto:john.doe@physik.hu-berlin.de) |
+| Name          | E-mail                                                            |
+| ------------- | ----------------------------------------------------------------- |
+| NOMAD Authors | [fairmat@physik.hu-berlin.de](mailto:fairmat@physik.hu-berlin.de) |

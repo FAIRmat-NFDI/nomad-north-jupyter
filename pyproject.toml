@@ -18,10 +18,10 @@ version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
-    { name = "John Doe", email = "john.doe@physik.hu-berlin.de" },
+    { name = "NOMAD Authors", email = "fairmat@physik.hu-berlin.de" },
 ]
 maintainers = [
-    { name = "John Doe", email = "john.doe@physik.hu-berlin.de" },
+    { name = "NOMAD Authors", email = "fairmat@physik.hu-berlin.de" },
 ]
 license = { file = "LICENSE" }
 dependencies = [
@@ -52,7 +52,7 @@ north = [
 extra-index-url = [
   "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",
 ]
-    
+
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
 exclude = [

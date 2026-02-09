@@ -4,8 +4,8 @@
   "checkout": "AddNorthTools",
   "context": {
     "cookiecutter": {
-      "full_name": "John Doe",
-      "email": "john.doe@physik.hu-berlin.de",
+      "full_name": "NOMAD Authors",
+      "email": "fairmat@physik.hu-berlin.de",
       "github_username": "fairmat-nfdi",
       "plugin_name": "nomad-north-jupyter",
       "module_name": "nomad_north_jupyter",
@@ -21,9 +21,7 @@
       "include_north_tools": true,
       "north_tool_name": "my_north_tool",
       "__north_tool_EP_name": "north_tool",
-      "_copy_without_render": [
-        "*.html"
-      ],
+      "_copy_without_render": ["*.html"],
       "_template": "git@github.com:FAIRmat-NFDI/cookiecutter-nomad-plugin.git",
       "_commit": "c72701b13c4809b5ebc979ba859869fea4eff44a"
     }

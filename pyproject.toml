@@ -42,11 +42,6 @@ dev = [
     "mkdocs-click",
     "pytest-asyncio",
 ]
-[dependency-groups]
-north = [
-    "jupyterlab",
-    "ipywidgets",
-]
 
 [tool.uv]
 extra-index-url = [
@@ -133,13 +128,8 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [project.entry-points.'nomad.plugin']
-
-
-
-
-
-
 north_tool_entry_point = "nomad_north_jupyter.north_tools.my_north_tool:north_tool"
+
 [tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues
 skip = [".github/*"]

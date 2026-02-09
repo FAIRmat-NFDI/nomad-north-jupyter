@@ -1,7 +1,6 @@
 ARG JUPYTER_TAG=2025-12-31
 ARG BASE_JUPYTER=quay.io/jupyter/base-notebook
 ARG UV_VERSION=0.9
-ARG PLUGIN_NAME="nomad-north-jupyter"
 
 FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv_stage
 
@@ -18,8 +17,6 @@ USER root
 # With pre-existing NB_USER="jovyan" and NB_UID=100, NB_GID=1000
 ENV HOME=/home/${NB_USER}
 ENV CONDA_DIR=/opt/conda
-
-ARG PLUGIN_NAME
 
 RUN apt-get update \
  && apt-get install --yes --quiet --no-install-recommends \
@@ -53,26 +50,10 @@ ENV UV_PROJECT_ENVIRONMENT=${CONDA_DIR} \
     # If needed one can create another venv with 'uv venv'
     UV_SYSTEM_PYTHON=1
 
-COPY --chown=${NB_USER}:${NB_GID} . ${HOME}/${PLUGIN_NAME}
-
-WORKDIR ${HOME}/${PLUGIN_NAME}
-
-# https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
-# Install dependencies
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv pip install . --group north
-
-
-WORKDIR ${HOME}
-RUN rm -rf ${HOME}/${PLUGIN_NAME}
-
 RUN jupyter lab build --dev-build=False --minimize=False && \
     fix-permissions "/home/${NB_USER}" \
     && fix-permissions "${CONDA_DIR}"
 
-WORKDIR ${HOME}
-
 EXPOSE 8888
 
 RUN touch ${HOME}/.hushlogin
-

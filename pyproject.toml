@@ -43,6 +43,12 @@ dev = [
     "pytest-asyncio",
 ]
 
+[dependency-groups]
+north = [
+    "jupyterlab",
+    "ipywidgets",
+]
+
 [tool.uv]
 extra-index-url = [
   "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",

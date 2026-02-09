@@ -126,7 +126,7 @@ git push origin main
 
 ## Requirements
 
-- Python 3.6 or higher
+- Python 3.9 or higher
 - Git installed and configured
 
 ## License

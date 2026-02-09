@@ -150,14 +150,18 @@ def main():
             sys.exit(1)
     
     # Fetch if requested
+    fetched = False
     if args.fetch:
         if not fetch_upstream(args.remote_name):
             sys.exit(1)
+        fetched = True
     
     # Set branch tracking if requested
     if args.set_tracking:
-        if not fetch_upstream(args.remote_name):
-            print("Warning: Failed to fetch before setting tracking", file=sys.stderr)
+        # Only fetch if we haven't already
+        if not fetched:
+            if not fetch_upstream(args.remote_name):
+                print("Warning: Failed to fetch before setting tracking", file=sys.stderr)
         
         if not set_branch_upstream(args.set_tracking, args.remote_name, args.remote_branch):
             sys.exit(1)

@@ -19,8 +19,6 @@ from nomad_north_jupyter.north_tools.jupyter_north_tool import north_tool_entry_
 
 
 def test_importing_north_tool():
-    # this will raise an exception if pydantic model validation fails for the north tool
-
     assert (
         north_tool_entry_point.id_url_safe == 'nomad_north_jupyter_my_north_tool'
         or north_tool_entry_point.id == 'nomad-north-nomad-north-jupyter'

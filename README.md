@@ -29,7 +29,7 @@ This image is designed to be used as a base for custom NOMAD NORTH Jupyter tools
 
 ### Package management
 
-Both `uv` and `pip` are available as package managers in the image. Both install and uninstall packages in the Conda environment, so you can use either one to manage your Python dependencies.
+Both `uv` and `pip` are available as package managers in the image. Both install and uninstall packages in the Conda environment, so you can use either one of them to manage your Python dependencies.
 
 **Example using uv:**
 ```dockerfile

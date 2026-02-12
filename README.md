@@ -4,7 +4,7 @@ This directory contains the NORTH tool configuration and Docker image for a Jupy
 
 ## Quick start
 
-The jupyter_north_tool NORTH tool provides a containerized JupyterLab environment for interactive analysis with the nomad-north-jupyter plugin.
+The `jupyter_north_tool` NORTH tool provides a containerized JupyterLab environment for interactive analysis with the `nomad-north-jupyter` plugin.
 
 ## Building and testing
 

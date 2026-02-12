@@ -14,7 +14,7 @@ env:
   UV_VERSION: 0.9
   PYTHON_VERSION: 3.12
   JUPYTER_TAG: 2025-12-31
-  NORTH_TOOL_DIR: src/nomad_north_jupyter/north_tools/my_north_tool
+  NORTH_TOOL_DIR: src/nomad_north_jupyter/north_tools/jupyter_north_tool
 
 permissions:
   packages: write

@@ -1,126 +1,92 @@
-# nomad-north-jupyter
+# jupyter_north_tool - NORTH Jupyter tool
 
-An example for Jupyter NORTH tool (Jupyter docker image).
+This directory contains the NORTH tool configuration and Docker image for a Jupyter-based tool in the NOMAD NORTH (NOMAD Oasis Remote Tools Hub) environment. The image can be used as a base image to write [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) in a nomad plugin created from [cookiecutter-nomad-plugin](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) for custom Jupyter NORTH tools.
 
-This `nomad` plugin was generated with `Cookiecutter` along with `@nomad`'s [`cookiecutter-nomad-plugin`](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) template.
+## Quick start
 
-## Development
+The jupyter_north_tool NORTH tool provides a containerized JupyterLab environment for interactive analysis with the nomad-north-jupyter plugin.
 
-If you want to develop locally this plugin, clone the project and in the plugin folder, create a virtual environment (you can use Python 3.10, 3.11 or 3.12):
+## Building and testing
 
-```sh
-git clone https://github.com/fairmat-nfdi/nomad-north-jupyter.git
-cd nomad-north-jupyter
-python3.11 -m venv .pyenv
-. .pyenv/bin/activate
+Build the Docker image locally:
+
+```bash
+docker build -f src/nomad_north_jupyter/north_tools/jupyter_north_tool/Dockerfile \
+    -t ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest .
 ```
 
-Make sure to have `pip` upgraded:
+Test the image:
 
-```sh
-pip install --upgrade pip
+```bash
+docker run -p 8888:8888 ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest
 ```
 
-We recommend installing `uv` for fast pip installation of the packages:
+Access JupyterLab at `http://localhost:8888`.
 
-```sh
-pip install uv
+## Using `nomad-north-jupyter` as a Base Image
+
+This image is designed to be used as a base for custom NOMAD NORTH Jupyter tools. When extending this image in your plugin's Dockerfile, keep the following in mind:
+
+### Package Management
+
+Both `uv` and `pip` are available as package managers in the image. Both install and uninstall packages in the Conda environment, so you can use either one to manage your Python dependencies.
+
+**Example using uv:**
+```dockerfile
+RUN uv pip install numpy pandas scipy
 ```
 
-Install the `nomad-lab` package:
-
-```sh
-uv pip install -e '.[dev]'
+**Example using pip:**
+```dockerfile
+RUN pip install --no-cache-dir matplotlib seaborn
 ```
 
-### Run the tests
+### Port and User Configuration
 
-You can run locally the tests:
+Like other Jupyter notebook images, port `8888` is exposed for JupyterLab access. The default user is `${NB_USER}` (usually `jovyan`), and you should switch to this user when installing packages or copying files to ensure proper permissions.
 
-```sh
-python -m pytest -sv tests
+### Fixing Permissions
+
+After customizing the base image (e.g., installing additional packages or adding files), you may need to fix file permissions to avoid permission issues when running the container. Add the following lines at the end of your Dockerfile after all customizations:
+
+```dockerfile
+COPY --chown=${NB_USER}:${NB_GID} . ${HOME}/${PLUGIN_NAME}
+RUN fix-permissions "/home/${NB_USER}" \
+    && fix-permissions "${CONDA_DIR}"
 ```
 
-where the `-s` and `-v` options toggle the output verbosity.
+**Complete example Dockerfile:**
+```dockerfile
+ARG IMAGE_TAG=latest
+FROM ghcr.io/fairmat-nfdi/nomad-north-jupyter:${IMAGE_TAG}
 
-Our CI/CD pipeline produces a more comprehensive test report using the `pytest-cov` package. You can generate a local coverage report:
+USER root
 
-```sh
-uv pip install pytest-cov
-python -m pytest --cov=src tests
+# Install system dependencies (if needed)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    graphviz \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+USER ${NB_USER}
+
+# Install Python packages
+RUN uv pip install numpy pandas matplotlib
+
+# Copy your plugin files
+COPY --chown=${NB_USER}:${NB_GID} . ${HOME}/${PLUGIN_NAME}
+
+# Fix permissions
+RUN fix-permissions "/home/${NB_USER}" \
+    && fix-permissions "${CONDA_DIR}"
 ```
 
-### Run linting and auto-formatting
+## Documentation
 
-We use [Ruff](https://docs.astral.sh/ruff/) for linting and formatting the code. Ruff auto-formatting is also a part of the GitHub workflow actions. You can run locally:
+For comprehensive documentation on creating and managing NORTH tools, including detailed information on topics such as:
 
-```sh
-ruff check .
-ruff format . --check
-```
+- Entry point configuration and `NORTHTool` API
+- Docker image structure and best practices
+- Dependency management
 
-### Debugging
-
-For interactive debugging of the tests, use `pytest` with the `--pdb` flag. We recommend using an IDE for debugging, e.g., _VSCode_. If that is the case, add the following snippet to your `.vscode/launch.json`:
-
-```json
-{
-  "configurations": [
-    {
-      "name": "<descriptive tag>",
-      "type": "debugpy",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "program": "${workspaceFolder}/.pyenv/bin/pytest",
-      "justMyCode": true,
-      "env": {
-        "_PYTEST_RAISE": "1"
-      },
-      "args": ["-sv", "--pdb", "<path-to-plugin-tests>"]
-    }
-  ]
-}
-```
-
-where `<path-to-plugin-tests>` must be changed to the local path to the test module to be debugged.
-
-The settings configuration file `.vscode/settings.json` automatically applies the linting and formatting upon saving the modified file.
-
-### Documentation on Github pages
-
-To view the documentation locally, install the related packages using:
-
-```sh
-uv pip install -r requirements_docs.txt
-```
-
-Run the documentation server:
-
-```sh
-mkdocs serve
-```
-
-## Adding this plugin to NOMAD
-
-Currently, NOMAD has two distinct flavors that are relevant depending on your role as an user:
-
-1. [A NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis): any user with a NOMAD Oasis instance.
-2. [Local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad): internal developers.
-
-### Adding this plugin in your NOMAD Oasis
-
-Read the [NOMAD plugin documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/oasis/plugins_install.html) for all details on how to deploy the plugin on your NOMAD instance.
-
-### Adding this plugin in your local NOMAD installation and the source code of NOMAD
-
-We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) repository to simplify the process. Please refer to that repository for detailed instructions.
-
-### Template update
-
-We use [`cruft`](https://github.com/cruft/cruft) to update the project based on template changes. To run the check for updates locally, run `cruft update` in the root of the project. More details see the instructions on [`cruft` website](https://cruft.github.io/cruft/#updating-a-project).
-
-## Main contributors
-
-| Name          | E-mail                                                            |
-| ------------- | ----------------------------------------------------------------- |
-| NOMAD Authors | [fairmat@physik.hu-berlin.de](mailto:fairmat@physik.hu-berlin.de) |
+See the [NOMAD NORTH Tools documentation](https://fairmat-nfdi.github.io/nomad-docs/howto/plugins/types/north_tools.html).

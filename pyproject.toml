@@ -134,7 +134,7 @@ package-dir = { "" = "src" }
 where = ["src"]
 
 [project.entry-points.'nomad.plugin']
-jupyter_north_tool_entry_point = "nomad_north_jupyter.north_tools.jupyter_north_tool:jupyter_north_tool"
+north_tool_entry_point = "nomad_north_jupyter.north_tools.jupyter_north_tool:north_tool_entry_point"
 
 [tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues

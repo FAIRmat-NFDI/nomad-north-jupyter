@@ -19,8 +19,7 @@
       "include_example_uploads": false,
       "include_action": false,
       "include_north_tools": true,
-      "north_tool_name": "my_north_tool",
-      "__north_tool_EP_name": "north_tool",
+      "north_tool_name": "jupyter_north_tool",
       "_copy_without_render": ["*.html"],
       "_template": "git@github.com:FAIRmat-NFDI/cookiecutter-nomad-plugin.git",
       "_commit": "c72701b13c4809b5ebc979ba859869fea4eff44a"

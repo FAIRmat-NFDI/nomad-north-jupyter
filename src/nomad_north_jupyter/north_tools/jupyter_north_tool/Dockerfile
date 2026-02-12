@@ -60,8 +60,9 @@ WORKDIR ${HOME}/${PLUGIN_NAME}
 # https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 # Install dependencies
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv pip install . --group north
-
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    # Use inexact to avoid removing pre-installed packages in the environment
+    uv sync --group north --inexact --no-install-project
 
 WORKDIR ${HOME}
 RUN rm -rf ${HOME}/${PLUGIN_NAME}

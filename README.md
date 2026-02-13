@@ -1,6 +1,8 @@
 # NORTH Jupyter tool
 
-This directory contains the NORTH tool configuration and Docker image for a Jupyter-based tool in the NOMAD NORTH (NOMAD Oasis Remote Tools Hub) environment. The  [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile)  an be used as a basis to define custom Jupyter NORTH tools.
+This `nomad-north-jupyter` is a NOMAD plugin and can be used along with other NOMAD plugins, in `[nomad-distro-dev](https://github.com/FAIRmat-NFDI/nomad-distro-dev)`, `[nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template)`, and in NOMAD production instance. Adding it in plugin orchestration will make the `jupyter_north_tool` available in the NORTH tools registry of the NOMAD Oasis environment. The tool provides a containerized Jupyter Notebook environment for interactive analysis.
+
+The plugin contains the NORTH tool configuration and Docker image for a Jupyter-based tool in the NOMAD NORTH (NOMAD Oasis Remote Tools Hub) environment. The `[nomad-north-jupyter image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter)` from this plugin provides the default base image for [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) be used as a basis to define custom Jupyter NORTH tools.
 
 ## Quick start
 
@@ -54,32 +56,20 @@ COPY --chown=${NB_USER}:${NB_GID} . ${HOME}/${PLUGIN_NAME}
 RUN fix-permissions "/home/${NB_USER}" \
     && fix-permissions "${CONDA_DIR}"
 ```
+## Adding this plugin to NOMAD
 
-**Complete example Dockerfile:**
-```dockerfile
-ARG IMAGE_TAG=latest
-FROM ghcr.io/fairmat-nfdi/nomad-north-jupyter:${IMAGE_TAG}
+Currently, NOMAD has two distinct flavors that are relevant depending on your role as an user:
 
-USER root
+1. [A NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis): any user with a NOMAD Oasis instance.
+2. [Local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad): internal developers.
 
-# Install system dependencies (if needed)
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    graphviz \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+### Adding this plugin in your NOMAD Oasis
 
-USER ${NB_USER}
+Read the [NOMAD plugin documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/oasis/plugins_install.html) for all details on how to deploy the plugin on your NOMAD instance.
 
-# Install Python packages
-RUN uv pip install numpy pandas matplotlib
+### Adding this plugin in your local NOMAD installation and the source code of NOMAD
 
-# Copy your plugin files
-COPY --chown=${NB_USER}:${NB_GID} . ${HOME}/${PLUGIN_NAME}
-
-# Fix permissions
-RUN fix-permissions "/home/${NB_USER}" \
-    && fix-permissions "${CONDA_DIR}"
-```
+We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) repository to simplify the process. Please refer to that repository for detailed instructions.
 
 ## Documentation
 

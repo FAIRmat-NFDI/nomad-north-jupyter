@@ -4,9 +4,23 @@ This `nomad-north-jupyter` is a NOMAD plugin and can be used along with other NO
 
 The plugin contains the NORTH tool configuration and Docker image for a Jupyter-based tool in the NOMAD NORTH (NOMAD Oasis Remote Tools Hub) environment. The [nomad-north-jupyter image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter) from this plugin provides the default base image for [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) be used as a basis to define custom Jupyter NORTH tools.
 
+
 ## Quick start
 
 The `jupyter_north_tool` NORTH tool provides a containerized JupyterLab environment for interactive analysis with the `nomad-north-jupyter` plugin.
+
+**In this section, we will cover:**
+- [Building and testing the Docker image locally](#building-and-testing)
+- [Using `nomad-north-jupyter` as a base image for custom NORTH tools](#using-nomad-north-jupyter-as-a-base-image)
+    - [Package management](#package-management)
+    - [Port and user configuration](#port-and-user-configuration)
+    - [Fixing permissions](#fixing-permissions)
+- [Adding the `nomad-north-jupyter` image in nomad-oasis](#adding-this-plugin-in-your-nomad-oasis)
+- [Adding this plugin to NOMAD](#adding-this-plugin-to-nomad)
+    - [Adding this plugin in your NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis)
+    - [Adding this plugin in your local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad)
+- [Documentation](#documentation)
+- [Main contributors](#main-contributors)
 
 ## Building and testing
 
@@ -25,9 +39,9 @@ docker run -p 8888:8888 ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest
 
 Access JupyterLab at `http://localhost:8888`.
 
-## Using `nomad-north-jupyter` as a base image
+## Using `nomad-north-jupyter` as a base image for custom NORTH tools
 
-This image is designed to be used as a base for custom NOMAD NORTH Jupyter tools. When extending this image in your plugin's Dockerfile, keep the following in mind:
+This image is designed to be used as a base for custom NOMAD NORTH Jupyter tools. When extending this image in your plugin's Dockerfile created from [cookiecutter-nomad-plugin](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/), keep the following in mind:
 
 ### Package management
 

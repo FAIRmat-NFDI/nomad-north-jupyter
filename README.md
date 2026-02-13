@@ -1,8 +1,8 @@
 # NORTH Jupyter tool
 
-This `nomad-north-jupyter` is a NOMAD plugin and can be used along with other NOMAD plugins, in `[nomad-distro-dev](https://github.com/FAIRmat-NFDI/nomad-distro-dev)`, `[nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template)`, and in NOMAD production instance. Adding it in plugin orchestration will make the `jupyter_north_tool` available in the NORTH tools registry of the NOMAD Oasis environment. The tool provides a containerized Jupyter Notebook environment for interactive analysis.
+This `nomad-north-jupyter` is a NOMAD plugin and can be used along with other NOMAD plugins, in [nomad-distro-dev](https://github.com/FAIRmat-NFDI/nomad-distro-dev), [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template), and in NOMAD production instance. Adding it in plugin orchestration will make the `jupyter_north_tool` available in the NORTH tools registry of the NOMAD Oasis environment.
 
-The plugin contains the NORTH tool configuration and Docker image for a Jupyter-based tool in the NOMAD NORTH (NOMAD Oasis Remote Tools Hub) environment. The `[nomad-north-jupyter image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter)` from this plugin provides the default base image for [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) be used as a basis to define custom Jupyter NORTH tools.
+The plugin contains the NORTH tool configuration and Docker image for a Jupyter-based tool in the NOMAD NORTH (NOMAD Oasis Remote Tools Hub) environment. The [nomad-north-jupyter image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter) from this plugin provides the default base image for [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) be used as a basis to define custom Jupyter NORTH tools.
 
 ## Quick start
 
@@ -56,6 +56,33 @@ COPY --chown=${NB_USER}:${NB_GID} . ${HOME}/${PLUGIN_NAME}
 RUN fix-permissions "/home/${NB_USER}" \
     && fix-permissions "${CONDA_DIR}"
 ```
+
+## Adding the `nomad-north-jupyter` image in nomad-oasis
+If `nomad-north-jupyter` is not part of the plugin orchestration, you can still add the `nomad-north-jupyter` image to the NORTH tool service by editing the `nomad.yaml` file in a [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template) instance (not recommended) . Define the image as a NORTH tool in `nomad.yaml`, as shown below ( see the full NORTH tool configuration in the [NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/reference/config.html) ):
+
+```yaml
+# Not a recommended way
+north:
+  jupyterhub_crypt_key: "978bfb2e13a8448a253c629d8dd84ffsd587f30e635b753153960930cad9d36d"
+  tools:
+    options:
+      jupyter:
+        image: ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest
+        description: "### **Jupyter Notebook**: The Classic Notebook Interface"
+        file_extensions:
+          - ipynb
+        icon: jupyter_logo.svg
+        image_pull_policy: Always
+        maintainer:
+          - email: fairmat@physik.hu-berlin.de
+            name: NOMAD Authors
+        mount_path: /home/jovyan
+        path_prefix: lab/tree
+        privileged: false
+        short_description: ""
+        with_path: true
+```
+**📝** We recommand integration of the NORTH tool via [NORTH tool entry point](https://nomad-lab.eu/prod/v1/docs/howto/plugins/types/north_tools.html#north-tool-entry-point).
 ## Adding this plugin to NOMAD
 
 Currently, NOMAD has two distinct flavors that are relevant depending on your role as an user:
@@ -82,3 +109,9 @@ For comprehensive documentation on creating and managing NORTH tools, including 
 See the [NOMAD NORTH Tools documentation](https://fairmat-nfdi.github.io/nomad-docs/howto/plugins/types/north_tools.html).
 
 **📝** This `nomad` plugin was generated with `Cookiecutter` along with `@nomad`'s [`cookiecutter-nomad-plugin`](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) template.
+
+## Main contributors
+
+| Name          | E-mail                                                            |
+| ------------- | ----------------------------------------------------------------- |
+| NOMAD Authors | [fairmat@physik.hu-berlin.de](mailto:fairmat@physik.hu-berlin.de)

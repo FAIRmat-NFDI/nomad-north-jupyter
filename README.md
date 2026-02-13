@@ -9,18 +9,18 @@ The plugin contains the NORTH tool configuration and Docker image for a Jupyter-
 
 The `jupyter_north_tool` NORTH tool provides a containerized JupyterLab environment for interactive analysis with the `nomad-north-jupyter` plugin.
 
-**In this section, we will cover:**
-- [Building and testing the Docker image locally](#building-and-testing)
-- [Using `nomad-north-jupyter` as a base image for custom NORTH tools](#using-nomad-north-jupyter-as-a-base-image)
-    - [Package management](#package-management)
-    - [Port and user configuration](#port-and-user-configuration)
-    - [Fixing permissions](#fixing-permissions)
-- [Adding the `nomad-north-jupyter` image in nomad-oasis](#adding-this-plugin-in-your-nomad-oasis)
-- [Adding this plugin to NOMAD](#adding-this-plugin-to-nomad)
-    - [Adding this plugin in your NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis)
-    - [Adding this plugin in your local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad)
-- [Documentation](#documentation)
-- [Main contributors](#main-contributors)
+**In the following sections, we will cover:**
+1. [Building and testing the Docker image locally](#building-and-testing)
+2. [Using `nomad-north-jupyter` as a base image for custom NORTH tools](#using-nomad-north-jupyter-as-a-base-image-for-custom-north-tools)
+   - [Package management](#package-management)
+   - [Port and user configuration](#port-and-user-configuration)
+   - [Fixing permissions](#fixing-permissions)
+3. [Adding the `nomad-north-jupyter` image in nomad-oasis](#adding-this-plugin-in-your-nomad-oasis)
+4. [Adding this plugin to NOMAD](#adding-this-plugin-to-nomad)
+   - [Adding this plugin in your NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis)
+   -  [Adding this plugin in your local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad)
+5. [Documentation](#documentation)
+6. [Main contributors](#main-contributors)
 
 ## Building and testing
 

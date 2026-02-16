@@ -11,16 +11,17 @@ The `jupyter_north_tool` NORTH tool provides a containerized JupyterLab environm
 
 **In the following sections, we will cover:**
 1. [Building and testing the Docker image locally](#building-and-testing)
-2. [Using `nomad-north-jupyter` as a base image for custom NORTH tools](#using-nomad-north-jupyter-as-a-base-image-for-custom-north-tools)
+1. [Using `nomad-north-jupyter` as a base image for custom NORTH tools](#using-nomad-north-jupyter-as-a-base-image-for-custom-north-tools)
    - [Package management](#package-management)
    - [Port and user configuration](#port-and-user-configuration)
    - [Fixing permissions](#fixing-permissions)
-3. [Adding the `nomad-north-jupyter` image in a NOMAD oasis](#adding-this-plugin-in-your-nomad-oasis)
-4. [Adding this plugin to NOMAD](#adding-this-plugin-to-nomad)
-   - [Adding this plugin in your NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis)
-   -  [Adding this plugin in your local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad)
-5. [Documentation](#documentation)
-6. [Main contributors](#main-contributors)
+1. [Adding `nomad-north-jupyter` plugin to NOMAD](#adding-nomad-north-jupyter-plugin-to-nomad)
+   - [Adding `nomad-north-jupyter` plugin in your NOMAD Oasis](#adding-nomad-north-jupyter-plugin-in-your-nomad-oasis)
+   - [Adding `nomad-north-jupyter` plugin in your local NOMAD installation](#adding-nomad-north-jupyter-plugin-in-your-local-nomad-installation)
+1. [Adding `nomad-north-jupyter` image in a NOMAD Oasis (alternative)](#adding-nomad-north-jupyter-image-in-a-nomad-oasis)
+1. [Reconfigure existing NORTH tool entry point](#reconfigure-existing-north-tool-entry-point)
+1. [Documentation](#documentation)
+1. [Main contributors](#main-contributors)
 
 ## Building and testing
 
@@ -71,27 +72,24 @@ RUN fix-permissions "/home/${NB_USER}" \
     && fix-permissions "${CONDA_DIR}"
 ```
 
-## Adding this plugin to NOMAD
+## Adding `nomad-north-jupyter` plugin to NOMAD
 
 Currently, NOMAD has two distinct flavors that are relevant depending on your role as an user:
 
-1. [A NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis): any user with a NOMAD Oasis instance.
-2. [Local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad): internal developers.
-
-### Adding this plugin in your NOMAD Oasis
+### Adding `nomad-north-jupyter` plugin in your NOMAD Oasis
 
 Read the [NOMAD plugin documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/oasis/plugins_install.html) for all details on how to deploy the plugin on your NOMAD instance.
-using-nomad-north-jupyter-as-a-base-image
-### Adding this plugin in your local NOMAD installation and the source code of NOMAD
+
+### Adding `nomad-north-jupyter` plugin in your local NOMAD installation
 
 We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) repository to simplify the process. Please refer to that repository for detailed instructions.
 
-## Adding the `nomad-north-jupyter` image in a NOMAD Oasis
+## Adding `nomad-north-jupyter` image in a NOMAD Oasis
 
 > ⚠️ **Warning:**
     We strongly recommend to integrate `nomad-north-jupyter` into NOMAD as a plugin. The following is only valid if you have an existing OASIS image which you do not want to rebuild, but you still want to add the Jupyter image to the running `north` service.
 
-If the `nomad-north-jupyter` plugin is not yet installed in your deployment, you can still add the `nomad-north-jupyter` image to the NORTH service by editing the `nomad.yaml` file in a [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template) instance, by defining a corresponding  NORTH tool in `nomad.yaml`, as shown below ( see the full NORTH tool configuration in the [NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/reference/config.html) ):
+If you cannot use the plugin approach, you can add the `nomad-north-jupyter` image to your NORTH service by editing the `nomad.yaml` file in a [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template) instance. Define the corresponding NORTH tool in `nomad.yaml` as shown below (see the full NORTH tool configuration in the [NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/reference/config.html)):
 
 ```yaml
 # Not a recommended way
@@ -115,7 +113,21 @@ north:
         short_description: ""
         with_path: true
 ```
-> **📝** We recommand integration of the NORTH tool via [NORTH tool entry point](https://nomad-lab.eu/prod/v1/docs/howto/plugins/types/north_tools.html#north-tool-entry-point).
+
+> **📝 Note:** We recommend integration of the NORTH tool via [NORTH tool entry point](https://nomad-lab.eu/prod/v1/docs/howto/plugins/types/north_tools.html#north-tool-entry-point).
+
+## Reconfigure existing NORTH tool entry point
+A [NORTHTool](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via `nomad.yaml` configuration file of your NOMAD Oasis instance. According to the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) of the configuration from different sources, only the overwritten fields will be updated, and the rest of the configuration will be inherited from the original entry point. For example, if you want to update the `image` and `display_name` of the existing `jupyter_north_tool` entry point, you can add the following configuration in your `nomad.yaml` file:
+
+```yaml
+plugins:
+  entry_points:
+    options:
+      nomad_north_jupyter.north_tools.jupyter_north_tool:north_tool_entry_point:
+        north_tool:
+          image: ghcr.io/fairmat-nfdi/nomad-north-jupyter:<another_tag>
+          display_name: "Renamed Jupyter"
+```
 
 ## Documentation
 

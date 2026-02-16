@@ -86,8 +86,8 @@ We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAI
 
 ## Adding `nomad-north-jupyter` image in a NOMAD Oasis
 
-> ⚠️ **Warning:**
-    We strongly recommend to integrate `nomad-north-jupyter` into NOMAD as a plugin. The following is only valid if you have an existing OASIS image which you do not want to rebuild, but you still want to add the Jupyter image to the running `north` service.
+> [!WARNING]
+> We strongly recommend integrating `nomad-north-jupyter` into NOMAD as a plugin. The following approach is only recommended if you have an existing NOMAD Oasis instance that you do not want to rebuild, but still want to add the Jupyter image to the running `north` service.
 
 If you cannot use the plugin approach, you can add the `nomad-north-jupyter` image to your NORTH service by editing the `nomad.yaml` file in a [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template) instance. Define the corresponding NORTH tool in `nomad.yaml` as shown below (see the full NORTH tool configuration in the [NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/reference/config.html)):
 
@@ -114,7 +114,8 @@ north:
         with_path: true
 ```
 
-> **📝 Note:** We recommend integration of the NORTH tool via [NORTH tool entry point](https://nomad-lab.eu/prod/v1/docs/howto/plugins/types/north_tools.html#north-tool-entry-point).
+> [!NOTE]
+> We recommend integration of the NORTH tool via [NORTH tool entry point](https://nomad-lab.eu/prod/v1/docs/howto/plugins/types/north_tools.html#north-tool-entry-point).
 
 ## Reconfigure existing NORTH tool entry point
 A [NORTHTool](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via `nomad.yaml` configuration file of your NOMAD Oasis instance. According to the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) of the configuration from different sources, only the overwritten fields will be updated, and the rest of the configuration will be inherited from the original entry point. For example, if you want to update the `image` and `display_name` of the existing `jupyter_north_tool` entry point, you can add the following configuration in your `nomad.yaml` file:
@@ -139,7 +140,8 @@ For comprehensive documentation on creating and managing NORTH tools, including 
 
 See the [NOMAD NORTH Tools documentation](https://fairmat-nfdi.github.io/nomad-docs/howto/plugins/types/north_tools.html).
 
-**📝 Note:** This `nomad` plugin was generated with `Cookiecutter` along with `@nomad`'s [`cookiecutter-nomad-plugin`](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) template.
+> [!NOTE]
+> This `nomad` plugin was generated with `Cookiecutter` along with `@nomad`'s [`cookiecutter-nomad-plugin`](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) template.
 
 ## Main contributors
 

@@ -20,6 +20,6 @@ from nomad_north_jupyter.north_tools.jupyter_north_tool import north_tool_entry_
 
 def test_importing_north_tool():
     assert (
-        north_tool_entry_point.id_url_safe == 'nomad_north_jupyter_my_north_tool'
+        north_tool_entry_point.id_url_safe == 'nomad_north_jupyter_tool'
         or north_tool_entry_point.id == 'nomad-north-nomad-north-jupyter'
     ), 'NORTHtool entry point has incorrect id or id_url_safe'

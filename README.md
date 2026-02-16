@@ -15,7 +15,7 @@ The `jupyter_north_tool` NORTH tool provides a containerized JupyterLab environm
    - [Package management](#package-management)
    - [Port and user configuration](#port-and-user-configuration)
    - [Fixing permissions](#fixing-permissions)
-3. [Adding the `nomad-north-jupyter` image in nomad-oasis](#adding-this-plugin-in-your-nomad-oasis)
+3. [Adding the `nomad-north-jupyter` image in a NOMAD oasis](#adding-this-plugin-in-your-nomad-oasis)
 4. [Adding this plugin to NOMAD](#adding-this-plugin-to-nomad)
    - [Adding this plugin in your NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis)
    -  [Adding this plugin in your local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad)
@@ -71,8 +71,27 @@ RUN fix-permissions "/home/${NB_USER}" \
     && fix-permissions "${CONDA_DIR}"
 ```
 
-## Adding the `nomad-north-jupyter` image in nomad-oasis
-If `nomad-north-jupyter` is not part of the plugin orchestration, you can still add the `nomad-north-jupyter` image to the NORTH tool service by editing the `nomad.yaml` file in a [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template) instance (not recommended) . Define the image as a NORTH tool in `nomad.yaml`, as shown below ( see the full NORTH tool configuration in the [NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/reference/config.html) ):
+## Adding this plugin to NOMAD
+
+Currently, NOMAD has two distinct flavors that are relevant depending on your role as an user:
+
+1. [A NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis): any user with a NOMAD Oasis instance.
+2. [Local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad): internal developers.
+
+### Adding this plugin in your NOMAD Oasis
+
+Read the [NOMAD plugin documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/oasis/plugins_install.html) for all details on how to deploy the plugin on your NOMAD instance.
+using-nomad-north-jupyter-as-a-base-image
+### Adding this plugin in your local NOMAD installation and the source code of NOMAD
+
+We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) repository to simplify the process. Please refer to that repository for detailed instructions.
+
+## Adding the `nomad-north-jupyter` image in a NOMAD Oasis
+
+> ⚠️ **Warning:**
+    We strongly recommend to integrate `nomad-north-jupyter` into NOMAD as a plugin. The following is only valid if you have an existing OASIS image which you do not want to rebuild, but you still want to add the Jupyter image to the running `north` service.
+
+If the `nomad-north-jupyter` plugin is not yet installed in your deployment, you can still add the `nomad-north-jupyter` image to the NORTH service by editing the `nomad.yaml` file in a [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template) instance, by defining a corresponding  NORTH tool in `nomad.yaml`, as shown below ( see the full NORTH tool configuration in the [NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/reference/config.html) ):
 
 ```yaml
 # Not a recommended way
@@ -96,21 +115,7 @@ north:
         short_description: ""
         with_path: true
 ```
-**📝** We recommand integration of the NORTH tool via [NORTH tool entry point](https://nomad-lab.eu/prod/v1/docs/howto/plugins/types/north_tools.html#north-tool-entry-point).
-## Adding this plugin to NOMAD
-
-Currently, NOMAD has two distinct flavors that are relevant depending on your role as an user:
-
-1. [A NOMAD Oasis](#adding-this-plugin-in-your-nomad-oasis): any user with a NOMAD Oasis instance.
-2. [Local NOMAD installation and the source code of NOMAD](#adding-this-plugin-in-your-local-nomad-installation-and-the-source-code-of-nomad): internal developers.
-
-### Adding this plugin in your NOMAD Oasis
-
-Read the [NOMAD plugin documentation](https://nomad-lab.eu/prod/v1/staging/docs/howto/oasis/plugins_install.html) for all details on how to deploy the plugin on your NOMAD instance.
-
-### Adding this plugin in your local NOMAD installation and the source code of NOMAD
-
-We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) repository to simplify the process. Please refer to that repository for detailed instructions.
+> **📝** We recommand integration of the NORTH tool via [NORTH tool entry point](https://nomad-lab.eu/prod/v1/docs/howto/plugins/types/north_tools.html#north-tool-entry-point).
 
 ## Documentation
 
@@ -122,7 +127,7 @@ For comprehensive documentation on creating and managing NORTH tools, including 
 
 See the [NOMAD NORTH Tools documentation](https://fairmat-nfdi.github.io/nomad-docs/howto/plugins/types/north_tools.html).
 
-**📝** This `nomad` plugin was generated with `Cookiecutter` along with `@nomad`'s [`cookiecutter-nomad-plugin`](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) template.
+**📝 Note:** This `nomad` plugin was generated with `Cookiecutter` along with `@nomad`'s [`cookiecutter-nomad-plugin`](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin) template.
 
 ## Main contributors
 

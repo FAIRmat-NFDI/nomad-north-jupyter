@@ -36,5 +36,5 @@ jupyter_north_tool = NORTHTool(
     display_name='jupyter_north_tool',
 )
 north_tool_entry_point = NorthToolEntryPoint(
-    id_url_safe='nomad_north_jupyter_my_north_tool', north_tool=jupyter_north_tool
+    id_url_safe='nomad_north_jupyter_tool', north_tool=jupyter_north_tool
 )

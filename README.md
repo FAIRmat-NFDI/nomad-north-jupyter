@@ -118,7 +118,7 @@ north:
 >  We strongly recommand integration of the Jupyter NORTH tool via the [`NorthToolEntryPoint`](https://nomad-lab.eu/prod/v1/docs/howto/plugins/types/north_tools.html#north-tool-entry-point), i.e., by installing `nomad-north-jupyter` into a deployment.
 
 ## Reconfigure existing NORTH tool entry point
-A [NORTHTool](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via `nomad.yaml` configuration file of your NOMAD Oasis instance. According to the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) of the configuration from different sources, only the overwritten fields will be updated, and the rest of the configuration will be inherited from the original entry point. For example, if you want to update the `image` and `display_name` of the existing `jupyter_north_tool` entry point, you can add the following configuration in your `nomad.yaml` file:
+The image shipped with `nomad-north-jupyter` is a generic Jupyter container that may be too simplistic for your use case. In that case, you can change to a different image to use in the container. A [`NORTHTool`](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via the `nomad.yaml` configuration file of your NOMAD Oasis instance (you can learn more about this reconfiguration and the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) in the NOMAD docs). Hence, If you have the `nomad-north-jupyter` plugin installed, you can do so by adjusting the entry point configuration in your `nomad.yaml` file:
 
 ```yaml
 plugins:

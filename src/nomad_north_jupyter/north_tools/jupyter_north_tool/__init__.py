@@ -19,9 +19,9 @@
 from nomad.config.models.north import NORTHTool
 from nomad.config.models.plugins import NorthToolEntryPoint
 
-tool = NORTHTool(
+jupyter_north_tool = NORTHTool(
     short_description='Jupyter Notebook server in NOMAD NORTH for NOMAD plugin nomad-north-jupyter.',
-    image='ghcr.io/fairmat-nfdi/nomad-north-jupyter/jupyter:latest',
+    image='ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest',
     description='Jupyter Notebook server in NOMAD NORTH for NOMAD plugin nomad-north-jupyter.',
     external_mounts=[],
     file_extensions=['ipynb'],
@@ -33,9 +33,8 @@ tool = NORTHTool(
     path_prefix='lab/tree',
     privileged=False,
     with_path=True,
-    display_name='my_north_tool',
+    display_name='Jupyter',
 )
-
-north_tool = NorthToolEntryPoint(
-    id_url_safe='nomad_north_jupyter_my_north_tool', north_tool=tool
+north_tool_entry_point = NorthToolEntryPoint(
+    id_url_safe='nomad_north_jupyter_tool', north_tool=jupyter_north_tool
 )

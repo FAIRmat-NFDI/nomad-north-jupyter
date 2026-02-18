@@ -138,7 +138,7 @@ version_scheme = "no-guess-dev"
 local_scheme = "node-and-date"
 
 [project.entry-points.'nomad.plugin']
-north_tool_entry_point = "nomad_north_jupyter.north_tools.my_north_tool:north_tool"
+north_tool_entry_point = "nomad_north_jupyter.north_tools.jupyter_north_tool:north_tool_entry_point"
 
 [tool.cruft]
 # Avoid updating workflow files, this leads to permissions issues

@@ -33,7 +33,7 @@ jupyter_north_tool = NORTHTool(
     path_prefix='lab/tree',
     privileged=False,
     with_path=True,
-    display_name='jupyter_north_tool',
+    display_name='Jupyter',
 )
 north_tool_entry_point = NorthToolEntryPoint(
     id_url_safe='nomad_north_jupyter_tool', north_tool=jupyter_north_tool

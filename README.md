@@ -1,13 +1,13 @@
 # `NORTH` Jupyter tool
 
-This `nomad-north-jupyter` is a NOMAD plugin and can be used along with other NOMAD plugins, in [nomad-distro-dev](https://github.com/FAIRmat-NFDI/nomad-distro-dev), [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template), and in NOMAD production instance. Adding it in plugin orchestration will make the `jupyter_north_tool` available in the `NORTH` tools registry of the NOMAD Oasis environment.
+`nomad-north-jupyter` is a NOMAD plugin and can be used along with other NOMAD plugins, in [nomad-distro-dev](https://github.com/FAIRmat-NFDI/nomad-distro-dev), [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template), and in NOMAD production instance. Adding it as a plugin will make the `jupyter_north_tool` available in the `NORTH` tools registry of the NOMAD Oasis environment.
 
-The plugin contains the `NORTH` tool configuration and Docker image for a Jupyter-based tool in the NOMAD `NORTH` (NOMAD Oasis Remote Tools Hub) environment. The [nomad-north-jupyter image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter) from this plugin provides the default base image for [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) be used as a basis to define custom Jupyter `NORTH` tools.
+The plugin contains the `NORTH` tool configuration and a Docker image for a Jupyter-based tool in the NOMAD `NORTH` (NOMAD Oasis Remote Tools Hub) environment. The [nomad-north-jupyter image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter) from this plugin provides the default base image for [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) which is used as a basis to define custom Jupyter `NORTH` tools.
 
 
 ## Quick start
 
-The `jupyter_north_tool`, an instance of `NORTH` tool, provides a containerized JupyterLab environment for interactive analysis with the `nomad-north-jupyter` plugin.
+The `jupyter_north_tool`, a `NORTH` tool instance provided by this plugin, offers a containerized JupyterLab environment for interactive analysis.
 
 **In the following sections, we will cover:**
 1. [Building and testing the Docker image locally](#building-and-testing)

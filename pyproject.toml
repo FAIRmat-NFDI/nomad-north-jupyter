@@ -14,7 +14,7 @@ classifiers = [
 ]
 name = "nomad-north-jupyter"
 description = "An example for Jupyter NORTH tool (Jupyter docker image)."
-version = "0.1.0"
+dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [

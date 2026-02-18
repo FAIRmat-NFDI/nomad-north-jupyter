@@ -1,0 +1,51 @@
+name: Upload Python Package
+
+on:
+    release:
+        types: [published]
+
+env:
+    python-version: 3.12
+
+jobs:
+    build:
+        name: Build Package
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  submodules: recursive
+            - name: Install uv and set the python version to ${{ env.python-version }}
+              uses: astral-sh/setup-uv@v5
+              with:
+                  python-version: ${{ env.python-version }}
+            - name: Build package
+              run: uv build
+            - name: Upload dist artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: dist-artifacts
+                  path: dist/
+
+    deploy:
+        name: Upload to PyPI
+        needs: build
+        runs-on: ubuntu-latest
+        environment:
+            name: pypi
+            url: https://pypi.org/p/nomad-north-jupyter
+        permissions:
+            id-token: write
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+                  submodules: recursive
+            - name: Download dist artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  name: dist-artifacts
+                  path: dist/
+            - name: Publish package distributions to PyPI
+              uses: pypa/gh-action-pypi-publish@release/v1

@@ -83,6 +83,13 @@ The plugin `nomad-north-jupyter` is a default member of the plugin group in NOMA
 
 We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) to facilitate NOMAD plugin development. To add `nomad-north-jupyter` to your local development environment, add it as a dependency in `pyproject.toml`. NOMAD will automatically discover `NORTHToolEntryPoint` instances (e.g., `north_tool_entry_point`) defined in `nomad-north-jupyter`. To replace or modify the `NORTH` tool configuration (for instance, changing the image or image version), you can adjust the entry point configuration in your `nomad.yaml` file.
 
+## Publish note
+In our Python package publishing workflow, before building the package, we update the image tag in the [NORTHTool](./src/nomad_north_jupyter/north_tools/jupyter_north_tool/__init__.py) entry point to the latest release version of the image (e.g., `v0.1.5`), and then publish the package to PyPI.
+
+However, the updated image tag in `NORTHTool` is not pushed back to the GitHub repository. Therefore, the image tag in the GitHub repository always remains set to `main`, even when you check out a specific release tag. For this reason, we recommend installing the plugin from [PyPI](https://pypi.org/), where the entry point always contains the correct image tag corresponding to the release.
+
+If you download a ZIP file of a specific release from GitHub, the image tag in the entry point will still be set to `main`, which is not correct. In that case, you can either manually update the image tag in the entry point to the correct release version (e.g., `v0.1.5`), or install the plugin directly from PyPI.
+
 ### Reconfigure existing `NORTH` tool entry point
 The image shipped with `nomad-north-jupyter` is a generic Jupyter container that may be too simplistic for your use case. In that case, you can change to a different image to use in the container. A [`NORTHTool`](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via the `nomad.yaml` configuration file of your NOMAD Oasis instance (you can learn more about this reconfiguration and the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) in the NOMAD docs). Hence, if you have the `nomad-north-jupyter` plugin installed, you can do so by adjusting the entry point configuration in your `nomad.yaml` file:
 

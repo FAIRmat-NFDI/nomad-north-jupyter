@@ -1,51 +1,60 @@
 name: Upload Python Package
 
 on:
-    release:
-        types: [published]
+  release:
+    types: [published]
 
 env:
-    python-version: 3.12
+  PYTHON_VERSION: 3.12
+  IMAGE: "ghcr.io/fairmat-nfdi/nomad-north-jupyter"
 
 jobs:
-    build:
-        name: Build Package
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-                  submodules: recursive
-            - name: Install uv and set the python version to ${{ env.python-version }}
-              uses: astral-sh/setup-uv@v5
-              with:
-                  python-version: ${{ env.python-version }}
-            - name: Build package
-              run: uv build
-            - name: Upload dist artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                  name: dist-artifacts
-                  path: dist/
+  build-docker-image:
+    uses: ./.github/workflows/publish_north.yml
+    secrets: inherit
 
-    deploy:
-        name: Upload to PyPI
-        needs: build
-        runs-on: ubuntu-latest
-        environment:
-            name: pypi
-            url: https://pypi.org/p/nomad-north-jupyter
-        permissions:
-            id-token: write
-        steps:
-            - uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0
-                  submodules: recursive
-            - name: Download dist artifacts
-              uses: actions/download-artifact@v4
-              with:
-                  name: dist-artifacts
-                  path: dist/
-            - name: Publish package distributions to PyPI
-              uses: pypa/gh-action-pypi-publish@release/v1
+  build:
+    name: Build Package
+    runs-on: ubuntu-latest
+    needs: build-docker-image
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Install uv and set the Python version to ${{ env.PYTHON_VERSION }}
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Overwrite the image tag
+        run: |
+          IMAGE_TAG=$(grep -oP "${{ env.IMAGE }}:\K[^'\",]+" src/nomad_north_jupyter/north_tools/jupyter_north_tool/__init__.py)
+
+          sed -i "s|${{ env.IMAGE }}:${IMAGE_TAG}|${{ env.IMAGE }}:${GITHUB_REF_NAME}|g" \
+          src/nomad_north_jupyter/north_tools/jupyter_north_tool/__init__.py
+
+      - name: build package
+        run: |
+          uv build
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-artifacts
+          path: dist/
+
+  deploy:
+    name: Upload to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/nomad-north-jupyter
+    permissions:
+      id-token: write
+    steps:
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-artifacts
+          path: dist/
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

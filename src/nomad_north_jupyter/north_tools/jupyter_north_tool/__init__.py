@@ -21,7 +21,7 @@ from nomad.config.models.plugins import NorthToolEntryPoint
 
 jupyter_north_tool = NORTHTool(
     short_description='Jupyter Notebook server in NOMAD NORTH for NOMAD plugin nomad-north-jupyter.',
-    image='ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest',
+    image='ghcr.io/fairmat-nfdi/nomad-north-jupyter:main',
     description='Jupyter Notebook server in NOMAD NORTH for NOMAD plugin nomad-north-jupyter.',
     external_mounts=[],
     file_extensions=['ipynb'],

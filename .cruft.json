@@ -1,7 +1,7 @@
 {
   "template": "git@github.com:FAIRmat-NFDI/cookiecutter-nomad-plugin.git",
   "commit": "89bf9fe1aa0a9a3fe74fd2af5ccc74d5ea974ced",
-  "checkout": null,
+  "checkout": "main",
   "context": {
     "cookiecutter": {
       "full_name": "NOMAD Authors",
@@ -20,10 +20,7 @@
       "include_action": false,
       "include_north_tools": true,
       "north_tool_name": "jupyter_north_tool",
-      "_copy_without_render": [
-        "*.html",
-        "*.png"
-      ],
+      "_copy_without_render": ["*.html", "*.png"],
       "_template": "git@github.com:FAIRmat-NFDI/cookiecutter-nomad-plugin.git",
       "_commit": "89bf9fe1aa0a9a3fe74fd2af5ccc74d5ea974ced"
     }

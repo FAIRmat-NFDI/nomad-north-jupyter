@@ -16,7 +16,7 @@ plugins = [
 
 By adding this plugin, the `jupyter` NORTH tool will become available in the `NORTH` tools registry of the NOMAD Oasis.
 
-By default this plugin is configured to use a generic data science Jupyter environment, but you can build your own custom image for your Oasis and switch to it using the `nomad.yaml` configuration file:
+By default this plugin is configured to use a generic Jupyter environment, but you can build your own custom image for your Oasis and switch to it using the `nomad.yaml` configuration file:
 
 ```yaml
 plugins:
@@ -62,7 +62,7 @@ We recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat
 
 ### Reconfigure existing `NORTH` tool entry point
 
-As outlined above, the image shipped with `nomad-north-jupyter` by default is a generic data science Jupyter container that may be too simplistic for your use case. In that case, you can change to a different image to use in the container. A [`NORTHTool`](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via the `nomad.yaml` configuration file of your NOMAD Oasis instance (you can learn more about this reconfiguration and the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) in the NOMAD docs). Hence, if you have the `nomad-north-jupyter` plugin installed, you can do so by adjusting the entry point configuration in your `nomad.yaml` file:
+As outlined above, the image shipped with `nomad-north-jupyter` by default is a generic slim Jupyter container that may be too simplistic for your use case. In that case, you can change to a different image to use in the container. A [`NORTHTool`](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via the `nomad.yaml` configuration file of your NOMAD Oasis instance (you can learn more about this reconfiguration and the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) in the NOMAD docs). Hence, if you have the `nomad-north-jupyter` plugin installed, you can do so by adjusting the entry point configuration in your `nomad.yaml` file:
 
 ```yaml
 plugins:

@@ -38,6 +38,4 @@ jupyter_north_tool = NORTHTool(
     with_path=True,
     display_name='Jupyter',
 )
-jupyter = NorthToolEntryPoint(
-    id_url_safe='nomad_north_jupyter_tool', north_tool=jupyter_north_tool
-)
+jupyter = NorthToolEntryPoint(id_url_safe='jupyter', north_tool=jupyter_north_tool)

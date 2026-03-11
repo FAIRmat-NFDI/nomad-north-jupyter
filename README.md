@@ -1,29 +1,118 @@
 # `NORTH` Jupyter tool
 
-`nomad-north-jupyter` is a NOMAD plugin and can be used along with other NOMAD plugins, in [nomad-distro-dev](https://github.com/FAIRmat-NFDI/nomad-distro-dev), [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template), and in NOMAD production instance. Adding it as a plugin will make the `jupyter_north_tool` available in the `NORTH` tools registry of the NOMAD Oasis environment.
+`nomad-north-jupyter` is a NOMAD plugin that provides an entry point for using a JupyterLab environment in NORTH (NOMAD Remote Tools Hub).
 
-The plugin contains the `NORTH` tool configuration and a Docker image for a Jupyter-based tool in the NOMAD `NORTH` (NOMAD Oasis Remote Tools Hub) environment. The [nomad-north-jupyter image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter) from this plugin provides the default base image for [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) which is used as a basis to define custom Jupyter `NORTH` tools.
+## Quickstart
 
+This plugin is available in PyPI under the name `nomad-north-jupyter`. To install this plugin into a NOMAD Oasis, add the following to your `pyproject.toml`:
 
-## Quick start
+```toml
+[project.optional-dependencies]
+plugins = [
+  "nomad-north-jupyter",
+  ...
+]
+```
 
-The `jupyter_north_tool`, a `NORTH` tool instance provided by this plugin, offers a containerized JupyterLab environment for interactive analysis.
+By adding this plugin, the `jupyter` NORTH tool will become available in the `NORTH` tools registry of the NOMAD Oasis.
 
-**In the following sections, we will cover:**
-1. [Building and testing the Docker image locally](#building-and-testing)
-1. [Using `nomad-north-jupyter` as a base image for custom `NORTH` tools](#using-nomad-north-jupyter-as-a-base-image-for-custom-north-tools)
-   - [Package management](#package-management)
-   - [Port and user configuration](#port-and-user-configuration)
-   - [Fixing permissions](#fixing-permissions)
+By default this plugin is configured to use a generic Jupyter environment, but you can build your own custom image for your Oasis and switch to it using the `nomad.yaml` configuration file:
+
+```yaml
+plugins:
+  entry_points:
+    options:
+      nomad_north_jupyter.north_tools.jupyter:
+        north_tool:
+          image: <your-docker-image-path>
+```
+
+## Plugin overview
+
+The `jupyter` NORTH tool instance provided by this plugin, offers a containerized JupyterLab environment for interactive analysis. The plugin contains the `NORTH` tool configuration and the
+[`nomad-north-jupyter` image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter) for a Jupyter-based tool in the `NORTH` (NOMAD Oasis Remote Tools Hub) environment. 
+
+In the following sections, we will cover:**
 1. [Adding the `nomad-north-jupyter` plugin to NOMAD](#adding-the-nomad-north-jupyter-plugin-to-nomad)
    - [Adding the `nomad-north-jupyter` plugin in your NOMAD Oasis](#adding-the-nomad-north-jupyter-plugin-in-your-nomad-oasis)
    - [Adding `nomad-north-jupyter` plugin in your local NOMAD installation](#adding-nomad-north-jupyter-plugin-in-your-local-nomad-installation)
    - [Reconfigure existing `NORTH` tool entry point](#reconfigure-existing-north-tool-entry-point)
-1. [Adding `nomad-north-jupyter` image in a NOMAD Oasis (not recommended)](#adding-nomad-north-jupyter-image-in-a-nomad-oasis-not-recommended)
+1. [A note on publishing](#a-note-on-publishing)
+1. [Adding `nomad-north-jupyter` image directly in a NOMAD Oasis (not recommended)](#adding-nomad-north-jupyter-image-directly-in-an-oasis-not-recommended)
+
+1. [Using `nomad-north-jupyter` as a base image for custom `NORTH` tools](#using-nomad-north-jupyter-as-a-base-image-for-custom-north-tools)
+   - [Package management](#package-management)
+   - [Port and user configuration](#port-and-user-configuration)
+   - [Fixing permissions](#fixing-permissions)
+1. [Building and testing the Docker image locally](#building-and-testing-the-docker-image-locally)
 1. [Documentation](#documentation)
 1. [Main contributors](#main-contributors)
 
-## Building and testing
+## Adding the `nomad-north-jupyter` plugin to NOMAD
+
+Currently, NOMAD has two distinct flavors (NOMAD Oasis and NOMAD development environment) that are relevant depending on your role as an user.
+
+### Adding the `nomad-north-jupyter` plugin in your NOMAD Oasis
+
+If you work with the [`nomad-distro-template`](https://github.com/FAIRmat-NFDI/nomad-distro-template), the `nomad-north-jupyter` plugin is installed by default. This facilitates NOMAD to autonomously discover and integrate the `NORTHTool` via `NorthToolEntryPoint` defined in the plugin. The tool will automatically be available in the `NORTH` tools registry of the NOMAD Oasis environment. Learn more about how this plugin is integrated in the `nomad-distro-template` [documentation](https://github.com/FAIRmat-NFDI/nomad-distro-template#the-jupyter-image).
+
+### Adding `nomad-north-jupyter` plugin in your local NOMAD installation
+
+We recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) to facilitate NOMAD plugin development. To add `nomad-north-jupyter` to your local development environment, add it as a dependency in `pyproject.toml`. NOMAD will automatically discover the `NORTHToolEntryPoint` instance `jupyter` defined in `nomad-north-jupyter`. To replace or modify the `NORTH` tool configuration (for instance, changing the image or image version), you can adjust the entry point configuration in your `nomad.yaml` file.
+
+### Reconfigure existing `NORTH` tool entry point
+
+As outlined above, the image shipped with `nomad-north-jupyter` by default is a generic slim Jupyter container that may be too simplistic for your use case. In that case, you can change to a different image to use in the container. A [`NORTHTool`](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via the `nomad.yaml` configuration file of your NOMAD Oasis instance (you can learn more about this reconfiguration and the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) in the NOMAD docs). Hence, if you have the `nomad-north-jupyter` plugin installed, you can do so by adjusting the entry point configuration in your `nomad.yaml` file:
+
+```yaml
+plugins:
+  entry_points:
+    options:
+      nomad_north_jupyter.north_tools:jupyter:
+        north_tool:
+          image: ghcr.io/fairmat-nfdi/nomad-north-jupyter:<another_tag>
+          display_name: "renamed jupyter tool"
+```
+
+## A note on publishing
+
+In our Python package publishing workflow, before building the package, we update the image tag in the [NORTHTool](./src/nomad_north_jupyter/north_tools/jupyter_north_tool/__init__.py) entry point to the latest release version of the image (e.g., `v0.1.5`), and then publish the package to PyPI.
+
+However, the updated image tag in `NORTHTool` is not pushed back to the GitHub repository. Therefore, the image tag in the GitHub repository always remains set to `main`, even when you check out a specific release tag. For this reason, we recommend installing the plugin from [PyPI](https://pypi.org/), where the entry point always contains the correct image tag corresponding to the release.
+
+If you download a ZIP file of a specific release from GitHub, the image tag in the entry point will still be set to `main`, which is not correct. In that case, you can either manually update the image tag in the entry point to the correct release version (e.g., `v0.1.5`), or install the plugin directly from PyPI.
+
+## Adding `nomad-north-jupyter` image directly in an Oasis (not recommended)
+
+> [!WARNING]
+> We strongly recommend integrating `nomad-north-jupyter` into NOMAD as a plugin. The following approach is only recommended if you have an existing NOMAD Oasis instance that you do not want to rebuild, but still want to add the Jupyter image to the running `NORTH` service.
+
+If you cannot use the plugin approach, you can add the `nomad-north-jupyter` image to your `NORTH` service by editing the `nomad.yaml` file in a [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template) instance. Define the corresponding `NORTH` tool in `nomad.yaml` as shown below (see the full `NORTH` tool configuration in the [NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/reference/config.html)):
+
+```yaml
+# Not a recommended way
+north:
+  jupyterhub_crypt_key: "978bfb2e13a8448a253c629d8dd84ffsd587f30e635b753153960930cad9d36d"
+  tools:
+    options:
+      jupyter:
+        image: ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest
+        description: "### **Jupyter Notebook**: The Classic Notebook Interface"
+        file_extensions:
+          - ipynb
+        icon: jupyter_logo.svg
+        image_pull_policy: Always
+        maintainer:
+          - email: fairmat@physik.hu-berlin.de
+            name: NOMAD Authors
+        mount_path: /home/jovyan
+        path_prefix: lab/tree
+        privileged: false
+        short_description: ""
+        with_path: true
+```
+
+## Building and testing the Docker image locally
 
 Build the Docker image locally:
 
@@ -41,6 +130,8 @@ docker run -p 8888:8888 ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest
 Access JupyterLab at `http://localhost:8888`.
 
 ## Using `nomad-north-jupyter` as a base image for custom `NORTH` tools
+
+The [`nomad-north-jupyter` image](https://github.com/FAIRmat-NFDI/nomad-north-jupyter/pkgs/container/nomad-north-jupyter) from this plugin provides the default base image for [Dockerfile](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/blob/main/%7B%7Bcookiecutter.plugin_name%7D%7D/py_sources/src/north_tools/%7B%7Bcookiecutter.north_tool_name%7D%7D/Dockerfile) which is used as a basis to define custom Jupyter `NORTH` tools.
 
 This image is designed to be used as a base for custom NOMAD `NORTH` Jupyter tools. When extending this image in your plugin's `Dockerfile` created from [cookiecutter-nomad-plugin](https://github.com/FAIRmat-NFDI/cookiecutter-nomad-plugin/), keep the following in mind:
 
@@ -70,67 +161,6 @@ After customizing the base image (e.g., installing additional packages or adding
 COPY --chown=${NB_USER}:${NB_GID} . ${HOME}/${PLUGIN_NAME}
 RUN fix-permissions "/home/${NB_USER}" \
     && fix-permissions "${CONDA_DIR}"
-```
-
-## Adding the `nomad-north-jupyter` plugin to NOMAD
-
-Currently, NOMAD has two distinct flavors (NOMAD Oasis and NOMAD development environment) that are relevant depending on your role as an user.
-
-### Adding the `nomad-north-jupyter` plugin in your NOMAD Oasis
-The plugin `nomad-north-jupyter` is a default member of the plugin group in NOMAD Oasis. This facilitates NOMAD to autonomously discover and integrate the `NORTHTool` via `NorthToolEntryPoint` defined in the plugin. Later, the tool will be available in the `NORTH` tools registry of the NOMAD Oasis environment.
-
-### Adding `nomad-north-jupyter` plugin in your local NOMAD installation
-
-We now recommend using the dedicated [`nomad-distro-dev`](https://github.com/FAIRmat-NFDI/nomad-distro-dev) to facilitate NOMAD plugin development. To add `nomad-north-jupyter` to your local development environment, add it as a dependency in `pyproject.toml`. NOMAD will automatically discover `NORTHToolEntryPoint` instances (e.g., `north_tool_entry_point`) defined in `nomad-north-jupyter`. To replace or modify the `NORTH` tool configuration (for instance, changing the image or image version), you can adjust the entry point configuration in your `nomad.yaml` file.
-
-## Publish note
-In our Python package publishing workflow, before building the package, we update the image tag in the [NORTHTool](./src/nomad_north_jupyter/north_tools/jupyter_north_tool/__init__.py) entry point to the latest release version of the image (e.g., `v0.1.5`), and then publish the package to PyPI.
-
-However, the updated image tag in `NORTHTool` is not pushed back to the GitHub repository. Therefore, the image tag in the GitHub repository always remains set to `main`, even when you check out a specific release tag. For this reason, we recommend installing the plugin from [PyPI](https://pypi.org/), where the entry point always contains the correct image tag corresponding to the release.
-
-If you download a ZIP file of a specific release from GitHub, the image tag in the entry point will still be set to `main`, which is not correct. In that case, you can either manually update the image tag in the entry point to the correct release version (e.g., `v0.1.5`), or install the plugin directly from PyPI.
-
-### Reconfigure existing `NORTH` tool entry point
-The image shipped with `nomad-north-jupyter` is a generic Jupyter container that may be too simplistic for your use case. In that case, you can change to a different image to use in the container. A [`NORTHTool`](https://nomad-lab.eu/prod/v1/docs/reference/config.html#northtool) entry point can be reconfigured via the `nomad.yaml` configuration file of your NOMAD Oasis instance (you can learn more about this reconfiguration and the [merge strategy](https://nomad-lab.eu/prod/v1/docs/reference/config.html#merging-rules) in the NOMAD docs). Hence, if you have the `nomad-north-jupyter` plugin installed, you can do so by adjusting the entry point configuration in your `nomad.yaml` file:
-
-```yaml
-plugins:
-  entry_points:
-    options:
-      nomad_north_jupyter.north_tools.jupyter_north_tool:north_tool_entry_point:
-        north_tool:
-          image: ghcr.io/fairmat-nfdi/nomad-north-jupyter:<another_tag>
-          display_name: "renamed jupyter tool"
-```
-
-## Adding `nomad-north-jupyter` image in a NOMAD Oasis (not recommended)
-
-> [!WARNING]
-> We strongly recommend integrating `nomad-north-jupyter` into NOMAD as a plugin. The following approach is only recommended if you have an existing NOMAD Oasis instance that you do not want to rebuild, but still want to add the Jupyter image to the running `NORTH` service.
-
-If you cannot use the plugin approach, you can add the `nomad-north-jupyter` image to your `NORTH` service by editing the `nomad.yaml` file in a [nomad-distro-template](https://github.com/FAIRmat-NFDI/nomad-distro-template) instance. Define the corresponding `NORTH` tool in `nomad.yaml` as shown below (see the full `NORTH` tool configuration in the [NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/reference/config.html)):
-
-```yaml
-# Not a recommended way
-north:
-  jupyterhub_crypt_key: "978bfb2e13a8448a253c629d8dd84ffsd587f30e635b753153960930cad9d36d"
-  tools:
-    options:
-      jupyter:
-        image: ghcr.io/fairmat-nfdi/nomad-north-jupyter:latest
-        description: "### **Jupyter Notebook**: The Classic Notebook Interface"
-        file_extensions:
-          - ipynb
-        icon: jupyter_logo.svg
-        image_pull_policy: Always
-        maintainer:
-          - email: fairmat@physik.hu-berlin.de
-            name: NOMAD Authors
-        mount_path: /home/jovyan
-        path_prefix: lab/tree
-        privileged: false
-        short_description: ""
-        with_path: true
 ```
 
 ## Documentation

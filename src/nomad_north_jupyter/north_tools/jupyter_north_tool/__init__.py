@@ -15,26 +15,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-from nomad.config.models.north import NORTHTool
-from nomad.config.models.plugins import NorthToolEntryPoint
-
-jupyter_north_tool = NORTHTool(
-    short_description='Jupyter Notebook server in NOMAD NORTH for NOMAD plugin nomad-north-jupyter.',
-    image='ghcr.io/fairmat-nfdi/nomad-north-jupyter:main',
-    description='Jupyter Notebook server in NOMAD NORTH for NOMAD plugin nomad-north-jupyter.',
-    external_mounts=[],
-    file_extensions=['ipynb'],
-    icon='logo/jupyter.svg',
-    image_pull_policy='Always',
-    default_url='/lab',
-    maintainer=[{'email': 'fairmat@physik.hu-berlin.de', 'name': 'NOMAD Authors'}],
-    mount_path='/home/jovyan',
-    path_prefix='lab/tree',
-    privileged=False,
-    with_path=True,
-    display_name='Jupyter',
-)
-north_tool_entry_point = NorthToolEntryPoint(
-    id_url_safe='nomad_north_jupyter_tool', north_tool=jupyter_north_tool
-)

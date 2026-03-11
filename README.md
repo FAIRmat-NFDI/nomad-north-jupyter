@@ -1,6 +1,6 @@
 # `NORTH` Jupyter tool
 
-`nomad-north-jupyter` is a NOMAD plugin that provides an entry point for using Jupyter in NORTH (NOMAD Remote Tools Hub).
+`nomad-north-jupyter` is a NOMAD plugin that provides an entry point for using a JupyterLab environment in NORTH (NOMAD Remote Tools Hub).
 
 ## Quickstart
 
@@ -44,7 +44,7 @@ In the following sections, we will cover:**
    - [Package management](#package-management)
    - [Port and user configuration](#port-and-user-configuration)
    - [Fixing permissions](#fixing-permissions)
-1. [Building and testing the Docker image locally](#building-and-testing)
+1. [Building and testing the Docker image locally](#building-and-testing-the-docker-image-locally)
 1. [Documentation](#documentation)
 1. [Main contributors](#main-contributors)
 

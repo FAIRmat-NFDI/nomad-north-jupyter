@@ -77,7 +77,7 @@ RUN fix-permissions "/home/${NB_USER}" \
 Currently, NOMAD has two distinct flavors (NOMAD Oasis and NOMAD development environment) that are relevant depending on your role as an user.
 
 ### Adding the `nomad-north-jupyter` plugin in your NOMAD Oasis
-The plugin `nomad-north-jupyter` is a default member of the plugin group in NOMAD Oasis. This facilitates NOMAD to autonomously discover and integrate the `NORTHTool` via `NorthToolEntryPoint` defined in the plugin. Later, the tool will be available in the `NORTH` tools registry of the NOMAD Oasis environment.
+The plugin `nomad-north-jupyter` is a default member of the plugin group in NOMAD Oasis. This facilitates NOMAD to autonomously discover and integrate the `NORTHTool` via `NORTHToolEntryPoint` defined in the plugin. Later, the tool will be available in the `NORTH` tools registry of the NOMAD Oasis environment.
 
 ### Adding `nomad-north-jupyter` plugin in your local NOMAD installation
 

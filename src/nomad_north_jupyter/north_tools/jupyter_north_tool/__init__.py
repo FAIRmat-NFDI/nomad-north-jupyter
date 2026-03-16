@@ -17,7 +17,7 @@
 #
 
 from nomad.config.models.north import NORTHTool
-from nomad.config.models.plugins import NorthToolEntryPoint
+from nomad.config.models.plugins import NORTHToolEntryPoint
 
 jupyter_north_tool = NORTHTool(
     short_description='Jupyter Notebook server in NOMAD NORTH for NOMAD plugin nomad-north-jupyter.',
@@ -35,6 +35,6 @@ jupyter_north_tool = NORTHTool(
     with_path=True,
     display_name='Jupyter',
 )
-north_tool_entry_point = NorthToolEntryPoint(
+north_tool_entry_point = NORTHToolEntryPoint(
     id_url_safe='nomad_north_jupyter_tool', north_tool=jupyter_north_tool
 )

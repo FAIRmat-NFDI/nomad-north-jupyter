@@ -28,7 +28,11 @@ jupyter_north_tool = NORTHTool(
     short_description='Jupyter Notebook server.',
     external_mounts=[],
     file_extensions=['ipynb'],
-    icon='logo/jupyter.svg',
+    icon=(
+        'https://raw.githubusercontent.com/FAIRmat-NFDI/'
+        'nomad-north-jupyter/main/src/nomad_north_jupyter/'
+        'north_tools/jupyter_north_tool/jupyter.svg'
+    ),
     image_pull_policy='Always',
     default_url='/lab',
     maintainer=[{'email': 'fairmat@physik.hu-berlin.de', 'name': 'The NOMAD Authors'}],
